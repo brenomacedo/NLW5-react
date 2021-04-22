@@ -6,6 +6,8 @@ import DurationToTime from '../utils/duration_to_time'
 import styles from '../styles/home.module.scss'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useContext } from 'react'
+import PlayerContext from '../contexts/playerContext'
 
 interface RawFile {
   url: string
@@ -41,6 +43,9 @@ interface HomeProps {
 }
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
+
+  const { play } = useContext(PlayerContext)
+
   return (
     <div className={styles.homePage}>
 
@@ -72,7 +77,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                   </span>
                 </div>
 
-                <button type="button">
+                <button type="button" onClick={() => play(episode)}>
                   <img src="/play-green.svg" alt="Tocar episódio"/>
                 </button>
               </li>
@@ -115,7 +120,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                   }} >{episode.publishedAt}</td>
                   <td>{episode.durationAsString}</td>
                   <td>
-                    <button type="button">
+                    <button type="button" onClick={() => play(episode)}>
                       <img src="/play-green.svg" alt="Tocar episódio"/>
                     </button>
                   </td>
