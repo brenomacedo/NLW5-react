@@ -43,8 +43,6 @@ interface EpisodeProps {
 
 export default function Episode({ episode }: EpisodeProps) {
 
-    const router = useRouter()
-
     return (
         <div className={styles.episode}>
             <div className={styles.thumbnailContainer}>
@@ -100,14 +98,25 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 }
 
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
-    return {
-        paths: [
-            {
-                params: {
-                    slug: 'aaa'
-                }
+
+    const { data } = await api.get<RawEpisode[]>('/episodes', {
+        params: {
+          _limit: 2,
+          _order: 'published_at',
+          _sort: 'desc'
+        }
+    })
+
+    const paths = data.map(episode => {
+        return {
+            params: {
+                slug: episode.id
             }
-        ],
+        }
+    })
+
+    return {
+        paths,
         fallback: 'blocking'
     }
 }
